@@ -75,7 +75,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.hasShadow = false
 
         let view = CrosshairView(frame: frame)
-        view.wantsLayer = true
+        //view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.clear.cgColor
 
         // Customize crosshair here:
