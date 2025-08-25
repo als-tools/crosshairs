@@ -80,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Customize crosshair here:
         view.crosshairColor = .systemRed
-        view.crosshairThickness = 0.5
+        view.crosshairThickness = 1.0
         view.crosshairStyle = .dashed // .solid, .dashed, .dotted
         view.keepoutRadius = 10.0
 
