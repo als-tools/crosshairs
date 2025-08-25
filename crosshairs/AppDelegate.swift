@@ -1,27 +1,53 @@
 import Cocoa
 
+enum CrosshairStyle {
+    case solid
+    case dashed
+    case dotted
+}
+
 class CrosshairView: NSView {
+    var crosshairColor: NSColor = .white
+    var crosshairThickness: CGFloat = 2.0
+    var crosshairStyle: CrosshairStyle = .solid
+    var keepoutRadius: CGFloat = 20.0 // pixels
+
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         guard let ctx = NSGraphicsContext.current?.cgContext else { return }
-        ctx.setStrokeColor(NSColor.white.cgColor)
-        ctx.setLineWidth(2.0)
+
+        ctx.setStrokeColor(crosshairColor.cgColor)
+        ctx.setLineWidth(crosshairThickness)
+
+        // Set line style
+        switch crosshairStyle {
+        case .solid:
+            ctx.setLineDash(phase: 0, lengths: [])
+        case .dashed:
+            ctx.setLineDash(phase: 0, lengths: [10, 6])
+        case .dotted:
+            ctx.setLineDash(phase: 0, lengths: [2, 6])
+        }
 
         let w = bounds.width
         let h = bounds.height
 
-        // Get mouse location in screen coordinates
         let mouseLoc = NSEvent.mouseLocation
-        let screenFrame = NSScreen.main?.frame ?? NSRect.zero
         let x = mouseLoc.x
-        let y = mouseLoc.y // flip Y
+        let y = mouseLoc.y
 
-        // Draw horizontal line
+        // Draw horizontal line (with keepout region)
         ctx.move(to: CGPoint(x: 0, y: y))
+        ctx.addLine(to: CGPoint(x: x - keepoutRadius, y: y))
+        ctx.move(to: CGPoint(x: x + keepoutRadius, y: y))
         ctx.addLine(to: CGPoint(x: w, y: y))
-        // Draw vertical line
+
+        // Draw vertical line (with keepout region)
         ctx.move(to: CGPoint(x: x, y: 0))
+        ctx.addLine(to: CGPoint(x: x, y: y - keepoutRadius))
+        ctx.move(to: CGPoint(x: x, y: y + keepoutRadius))
         ctx.addLine(to: CGPoint(x: x, y: h))
+
         ctx.strokePath()
     }
 }
@@ -51,10 +77,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let view = CrosshairView(frame: frame)
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.clear.cgColor
+
+        // Customize crosshair here:
+        view.crosshairColor = .systemRed
+        view.crosshairThickness = 3.0
+        view.crosshairStyle = .dashed // .solid, .dashed, .dotted
+        view.keepoutRadius = 30.0
+
         window.contentView = view
         window.makeKeyAndOrderFront(nil)
 
-        // Timer to redraw crosshair as mouse moves
         Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
             view.setNeedsDisplay(view.bounds)
         }
