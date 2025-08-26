@@ -87,9 +87,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.contentView = view
         window.makeKeyAndOrderFront(nil)
 
-        //Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { _ in
-        //    view.setNeedsDisplay(view.bounds)
-        //}
         NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved) { _ in
             view.setNeedsDisplay(view.bounds)
         }
