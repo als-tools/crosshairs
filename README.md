@@ -8,7 +8,5 @@ On Windows PowerToys has this functionality, so far every solution failed what I
 
 At this stage every parameter is hardcoded to my liking, once I have the time I will make a settings pane for it on the menubar. PRs welcome in that regard, I have zero experience with Swift and mac dev in general.
 
-
-
-https://github.com/user-attachments/assets/f71c3a87-1ca2-4d38-bc7e-3b3da83bff03
+[demo.webm](https://github.com/user-attachments/assets/5d5828f0-4d16-414e-bc1f-b3e9ef72ba4f)
 
